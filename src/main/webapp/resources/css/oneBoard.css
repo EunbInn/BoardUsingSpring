@@ -1,0 +1,44 @@
+@charset "UTF-8";
+#back-index {
+  text-align: left;
+  text-decoration: none;
+  color: black;
+}
+
+#back-index:hover {
+  text-decoration: underline;
+  color: red;
+}
+
+#find-box {
+  text-align: right;
+  margin-bottom: 10px;
+}
+
+#find {
+  height: 20px;
+}
+
+#submit {
+  height: 26px;
+}
+
+select {
+  height: 26px;
+}
+
+#page-box {
+  display: flex;
+  justify-content: center;
+}
+
+.page {
+  display: inline-block;
+  margin: 10px;
+  text-decoration: none;
+  color: black;
+}
+
+.selected {
+  font-weight: bold;
+}

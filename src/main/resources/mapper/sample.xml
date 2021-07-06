@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ac.kopo.kopo08.repository.mapper.SampleMapper">
+	<select id="findAll" resultType="kr.ac.kopo.kopo08.domain.Sample">
+		select * from sample	
+	</select>
+	
+	<select id="findAllByCondition" resultType="kr.ac.kopo.kopo08.domain.Sample">
+		select
+			*
+		from
+			sample t
+		where
+			1 = 1
+			<include refid="whereCondition" />
+	</select>
+	
+	<sql id="whereCondition">
+	<!-- title != null 바로 비교 됨 but type이 숫자일 경우 아래와 같이 null에 따옴표를 붙여 비교하면 비교가 됨 -->
+		<if test="id != 'null'"> 
+			and t.title = #{title}
+		</if>
+	</sql>
+</mapper>

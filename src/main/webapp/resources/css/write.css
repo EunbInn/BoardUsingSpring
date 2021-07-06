@@ -1,0 +1,29 @@
+@charset "UTF-8";
+table {
+  width: 850px;
+  border-collapse: collapse;
+  border: 2px solid black;
+}
+
+.category {
+  width: 150px;
+}
+
+.content {
+  text-align: left;
+  padding: 8px;
+}
+
+tr {
+  border-bottom: 2px solid black;
+}
+
+.input-box {
+  width: 700px;
+}
+
+#content {
+  width: 700px;
+  height: 500px;
+  resize: none;
+}
