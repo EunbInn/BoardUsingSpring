@@ -34,10 +34,12 @@ public class BoardItemController {
                                     Model model) {
         Optional<BoardItem> boardItemOp = boardItemRepository.findById(id);
         BoardItem boardItem = boardItemOp.get();
+        boardItem = boardItemService.showBoardItem(boardItem);
 
         // comments 가져오기
         List<BoardItem> comments = boardItemRepository.findAllByParent(id, Sort.by(Sort.Direction.DESC, "id"));
-
+        comments = boardItemService.showBoardItems(comments);
+        
         // 뒤로가기에서 목록으로 돌아가기 위해 boardid를 파라미터로 넘김
         model.addAttribute("boardId", boardId);
         model.addAttribute("boardItem", boardItem);
@@ -47,7 +49,7 @@ public class BoardItemController {
     }
 
     @RequestMapping(value = "/write/write01/{boardId}", method = { RequestMethod.GET, RequestMethod.POST })
-    public String Write(@PathVariable(name = "boardId") Long boardId, Model model) {
+    public String write(@PathVariable(name = "boardId") Long boardId, Model model) {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -57,26 +59,29 @@ public class BoardItemController {
 
         return "/newBoard/write/write01";
     }
+    
+    @RequestMapping(value = "/write/update01/{boardId}/{id}", method = { RequestMethod.GET, RequestMethod.POST })
+    public String update(@PathVariable(name = "boardId") Long boardId, 
+                        @PathVariable(name = "id") Long id, 
+                        Model model) {
+        Optional<BoardItem> boardItemOp = boardItemRepository.findById(id);
+        BoardItem boardItem = boardItemOp.get();
+        
+        // 뒤로가기에서 목록으로 돌아가기 위해 boardid를 파라미터로 넘김
+        model.addAttribute("boardItem", boardItem);
+        model.addAttribute("boardId", boardId);
 
-//    @RequestMapping(value = "/newBoard/write/write02/{boardId}", method = { RequestMethod.GET, RequestMethod.POST })
-//    public String Insert(@PathVariable(name = "boardId") Long boardId,
-//                        @ModelAttribute BoardItem boardItem, 
-//                        Model model) {
-//        Calendar cal = Calendar.getInstance();
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        Board board = new Board(boardId);
-//
-//        //data set
-//        boardItem.setDate(sdf.format(cal.getTime()));
-//        boardItem.setBoard(board);
-//
-//        boardItemRepository.save(boardItem);
-//
-//        List<BoardItem> boardItems = boardItemRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
-//        boardItem = boardItems.get(0);
-//
-//        return "redirect:/newBoard/oneView/" + boardId + "/" + boardItem.getId();
-//    }
+        return "/newBoard/write/update01";
+    }
+    
+    @RequestMapping(value = "/write/delete02/{boardId}", method = { RequestMethod.GET, RequestMethod.POST })
+    public String delete(@PathVariable(name = "boardId") Long boardId, 
+                        Model model) {
+       
+        model.addAttribute("boardId", boardId);
+
+        return "/newBoard/write/delete02";
+    }
 
     @RequestMapping(value = "/write/{type}/{boardId}/{id}", method = { RequestMethod.GET, RequestMethod.POST })
     public String Insert(@PathVariable(name = "boardId") Long boardId, 
@@ -86,16 +91,16 @@ public class BoardItemController {
                         Model model) {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        
+        Board board = new Board(boardId);
+        boardItem.setBoard(board);
         //data set
         if (type.equals("write02")) {
             boardItem.setDate(sdf.format(cal.getTime()));
-            Board board = new Board(boardId);
-            boardItem.setBoard(board);
             
             if (id != 0) {
                 boardItem.setParent(id);
                 boardItem.setId(null);
+                boardItem.setTitle(boardItem.getTitle());
                 
                 boardItemRepository.save(boardItem);
             } else {
@@ -108,8 +113,9 @@ public class BoardItemController {
 
         } else if (type.equals("update02")) {
             boardItemRepository.save(boardItem);
-        } else if (type.equals("delete02")) {
-            
+        } else if (type.equals("delete01")) {
+            boardItemRepository.deleteById(id, id);
+            return "redirect:/write/delete02/" + boardId;
         }
 
         return "redirect:/oneView/" + boardId + "/" + id;

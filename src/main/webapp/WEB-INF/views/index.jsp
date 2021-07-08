@@ -34,13 +34,13 @@
                   <tr>
                   <td> ${board.id }</td>
                   <td><a href="${path}/oneBoard/${board.id }">${board.title }</a></td>
-                  <td><a href="${path}/updateBoard/update01.jsp?boardId=${board.id }">수정</a></td>
+                  <td><a href="${path}/update01/${board.id }">수정</a></td>
                   </tr>
                 </c:forEach>
               </c:otherwise>
 			</c:choose>
 		</table>
-		<button class="btn" onclick="location.href='${path}/newBoard.jsp'">게시판 생성</button>
+		<button class="btn" onclick="location.href='${path}/newBoard'">게시판 생성</button>
 	</div>
 </body>
 </html>

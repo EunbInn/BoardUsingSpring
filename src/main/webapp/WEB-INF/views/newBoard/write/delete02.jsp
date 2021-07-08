@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="kr.ac.kopo.kopo08.domain.Board, kr.ac.kopo.kopo08.domain.BoardItem, java.util.List, 
-kr.ac.kopo.kopo08.service.BoardItemService, kr.ac.kopo.kopo08.service.BoardItemServiceImpl"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<c:set var="path" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>게시글 보기</title>
-<link rel="stylesheet" type="text/css" href="board.css">
+<link href="${path}/resources/css/board.css" rel="stylesheet" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style>
 	body {
@@ -37,10 +37,6 @@ kr.ac.kopo.kopo08.service.BoardItemService, kr.ac.kopo.kopo08.service.BoardItemS
 </style>
 </head>
 <body>
-<%
- 	String boardId = request.getParameter("boardId");
-	String nowPage = request.getParameter("page");
-%>
 <body>
 	<div id="content-wrap">
 		<form method="post">
@@ -52,7 +48,7 @@ kr.ac.kopo.kopo08.service.BoardItemService, kr.ac.kopo.kopo08.service.BoardItemS
 					<th id="confirm">게시글 삭제가 완료되었습니다</th>
 				</tr>
 			</table>
-			<button class="btn" id="back"><a href="../oneBoard.jsp?boardId=<%=boardId%>&page=<%=nowPage%>">목록으로</a></button>
+			<button class="btn" id="back"><a href="${path }/oneBoard/${boardId }">목록으로</a></button>
 		</form>
 	</div>
 </body>
