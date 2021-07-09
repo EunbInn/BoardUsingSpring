@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -27,7 +28,7 @@ public interface BoardItemRepository extends JpaRepository<BoardItem, Long>,JpaS
     Optional<BoardItem> findById(Long id);
     
     @Query("SELECT t FROM BoardItem t WHERE t.board.id = :boardId AND t.parent is null ORDER BY t.id DESC")
-    List<BoardItem> findAllByBoardId(@Param("boardId") Long boardId);
+    Page<BoardItem> findAllByBoardId(@Param("boardId") Long boardId, Pageable pageable);
     
     List<BoardItem> findAllByParent(Long id, Sort sort);
     
@@ -36,6 +37,11 @@ public interface BoardItemRepository extends JpaRepository<BoardItem, Long>,JpaS
     @Query("DELETE FROM BoardItem t WHERE t.id = :id OR t.parent = :parent")
     void deleteById(@Param("id") Long id, @Param("parent") Long parent);
     
-    List<BoardItem> findAll();
+    List<BoardItem> findAllByContentContainingIgnoreCaseOrTitleContainingIgnoreCase(String title, String content);
+    
+    Page<BoardItem> findAll(Specification<BoardItem> spec, Pageable pageable);
+    
+    
+    Page<BoardItem> findAll(Pageable pageable);
     List<BoardItem> findAllByOrderByIdDesc();
 }

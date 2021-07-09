@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,9 +29,10 @@ public class BoardItemController {
     @Autowired
     private BoardItemService boardItemService;
 
-    @RequestMapping(value = "/oneView/{boardId}/{id}", method = { RequestMethod.GET, RequestMethod.POST })
+    @RequestMapping(value = "/oneView/{boardId}/{id}/{page}", method = { RequestMethod.GET, RequestMethod.POST })
     public String findOneBoardItem(@PathVariable(name = "boardId") Long boardId, 
                                     @PathVariable(name = "id") Long id,
+                                    @PathVariable(name = "page") int page,
                                     Model model) {
         Optional<BoardItem> boardItemOp = boardItemRepository.findById(id);
         BoardItem boardItem = boardItemOp.get();
@@ -44,6 +46,7 @@ public class BoardItemController {
         model.addAttribute("boardId", boardId);
         model.addAttribute("boardItem", boardItem);
         model.addAttribute("comments", comments);
+        model.addAttribute("page", page);
 
         return "/newBoard/oneView";
     }
@@ -74,16 +77,18 @@ public class BoardItemController {
         return "/newBoard/write/update01";
     }
     
-    @RequestMapping(value = "/write/delete02/{boardId}", method = { RequestMethod.GET, RequestMethod.POST })
+    @RequestMapping(value = "/write/delete02/{boardId}/{page}", method = { RequestMethod.GET, RequestMethod.POST })
     public String delete(@PathVariable(name = "boardId") Long boardId, 
+                        @PathVariable(name = "page") Long page, 
                         Model model) {
        
         model.addAttribute("boardId", boardId);
+        model.addAttribute("page", page);
 
         return "/newBoard/write/delete02";
     }
 
-    @RequestMapping(value = "/write/{type}/{boardId}/{id}", method = { RequestMethod.GET, RequestMethod.POST })
+    @RequestMapping(value = "/write/{type}/{boardId}/{id}/{page}", method = { RequestMethod.GET, RequestMethod.POST })
     public String Insert(@PathVariable(name = "boardId") Long boardId, 
                         @PathVariable(name = "type") String type,
                         @PathVariable(name = "id") Long id,
@@ -118,7 +123,7 @@ public class BoardItemController {
             return "redirect:/write/delete02/" + boardId;
         }
 
-        return "redirect:/oneView/" + boardId + "/" + id;
+        return "redirect:/oneView/" + boardId + "/" + id + "/";
     }
 
 }

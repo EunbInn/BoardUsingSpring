@@ -1,9 +1,14 @@
 package kr.ac.kopo.kopo08.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -51,18 +56,30 @@ public class BoardController {
         return "/updateBoard/update01";
     }
 
-    @RequestMapping(value = "/oneBoard/{boardId}", method=RequestMethod.GET)
-    public String findOneBoard(@PathVariable(name = "boardId") Long boardId, Model model) {
+    @RequestMapping(value = "/oneBoard/{boardId}", method= {RequestMethod.GET, RequestMethod.POST})
+    public String findOneBoard(@PathVariable(name = "boardId") Long boardId,
+                                @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+                                @ModelAttribute HashMap<String, String> map,
+                                Model model) {
+        String keyType = map.get("keyType");
+        String value = map.get("value");
         // 보드 가져오기
         Optional<Board> board = boardRepository.findById(boardId);
         Board getBoard = board.get();
         getBoard = boardService.showBoard(getBoard);
+        Page<BoardItem> boardItems;
+        System.out.println(value);
         
-        List<BoardItem> boardItems = boardItemRepository.findAllByBoardId(boardId);
-        boardItems = boardItemService.showBoardItems(boardItems);
-
+        if (value == null) {
+            boardItems = boardItemRepository.findAllByBoardId(boardId, pageable);
+            boardItems = boardItemService.showBoardItems(boardItems);
+        } else {
+            boardItems = boardItemService.search(value, keyType, pageable);
+        }
         model.addAttribute("board", getBoard);
         model.addAttribute("boardItems", boardItems);
+        
+        
         
         return "/newBoard/oneBoard";
     }

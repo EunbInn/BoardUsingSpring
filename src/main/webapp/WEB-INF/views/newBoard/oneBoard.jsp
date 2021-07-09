@@ -19,11 +19,11 @@
     <h1>${board.title }</h1>
     <div id="find-box">
       <form method="POST">
-        <select name="findType">
+        <select name="keyType" id="keyType">
           <option value="title">제목</option>
           <option value="writer">작성자</option>
           <option value="title+writer">제목+작성자</option>
-        </select> <input id="find" name="find" type="text" maxlength="30"
+        </select> <input id="value" name="value" type="text" maxlength="30"
           placeholder="검색어 입력"> <input type="submit" id="submit"
           formaction="./oneBoard/${board.id }" value="검색">
       </form>
@@ -35,17 +35,18 @@
         <th>작성자</th>
         <th>작성 일자</th>
       </tr>
-      <c:set var="boardItems" value="${boardItems }" />
+      <c:set var="boardItemList" value="${boardItems.getContent() }" />
+      <c:set var="boardItemSize" value="${boardItems.getTotalElements() }" />
       <c:choose>
-        <c:when test="${boardItems.size() == 0 }">
+        <c:when test="${boardItemSize == 0 }">
           <tr>
             <td colspan='4'>작성된 게시글이 없습니다</td>
           </tr>
         </c:when>
         <c:otherwise>
-          <c:forEach var="boardItem" items="${boardItems }" varStatus="status">
+          <c:forEach var="boardItem" items="${boardItemList }" varStatus="status">
             <tr>
-              <td>${boardItems.size()-(status.count-1)}</td>
+              <td>${boardItemSize - (status.count - 1)}</td>
               <td><a href="${path}/oneView/${board.id}/${boardItem.id}">${boardItem.title }</a></td>
               <td>${boardItem.writer }</td>
               <td>${boardItem.date }</td>
