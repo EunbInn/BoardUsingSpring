@@ -57,6 +57,11 @@
     </table>
     <button class="btn"
       onclick="location.href='${path }/write/write01/${board.id }'">글쓰기</button>
+    <!-- paging block -->
+    <div id="paging-box">
+      <c:forEach begin="${PageCal.startPage }" end="${PageCal.endPage }" var="i" varStatus="status">
+      </c:forEach>
+    </div>
   </div>
 </body>
 </html>
