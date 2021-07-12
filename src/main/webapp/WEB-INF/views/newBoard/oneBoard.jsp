@@ -36,7 +36,8 @@
         <th>작성 일자</th>
       </tr>
       <c:set var="boardItemList" value="${boardItems.getContent() }" />
-      <c:set var="boardItemSize" value="${boardItems.getTotalElements() }" />
+      <c:set var="boardItemSize"
+        value="${boardItems.getTotalElements() }" />
       <c:choose>
         <c:when test="${boardItemSize == 0 }">
           <tr>
@@ -44,10 +45,12 @@
           </tr>
         </c:when>
         <c:otherwise>
-          <c:forEach var="boardItem" items="${boardItemList }" varStatus="status">
+          <c:forEach var="boardItem" items="${boardItemList }"
+            varStatus="status">
             <tr>
               <td>${boardItemSize - (status.count - 1)}</td>
-              <td><a href="${path}/oneView/${board.id}/${boardItem.id}">${boardItem.title }</a></td>
+              <td><a
+                href="${path}/oneView/${board.id}/${boardItem.id}">${boardItem.title }</a></td>
               <td>${boardItem.writer }</td>
               <td>${boardItem.date }</td>
             </tr>
@@ -59,8 +62,45 @@
       onclick="location.href='${path }/write/write01/${board.id }'">글쓰기</button>
     <!-- paging block -->
     <div id="paging-box">
-      <c:forEach begin="${PageCal.startPage }" end="${PageCal.endPage }" var="i" varStatus="status">
-      </c:forEach>
+      <ul class="pagination justify-content-center">
+        <!-- 이전 -->
+        <c:choose>
+          <c:when test="${ulist.first}"></c:when>
+          <c:otherwise>
+            <li class="page-item"><a class="page-link"
+              href="/admin/userlist/?field=${param.field}&word=${param.word}&page=0">처음</a></li>
+            <li class="page-item"><a class="page-link"
+              href="/admin/userlist/?field=${param.field}&word=${param.word}&page=${ulist.number-1}">&larr;</a></li>
+          </c:otherwise>
+        </c:choose>
+
+        <!-- 페이지 그룹 -->
+        <c:forEach begin="${startBlockPage}" end="${endBlockPage}"
+          var="i">
+          <c:choose>
+            <c:when test="${ulist.pageable.pageNumber+1 == i}">
+              <li class="page-item disabled"><a class="page-link"
+                href="/admin/userlist/?field=${param.field}&word=${param.word}&page=${i-1}">${i}</a></li>
+            </c:when>
+            <c:otherwise>
+              <li class="page-item"><a class="page-link"
+                href="/admin/userlist/?field=${param.field}&word=${param.word}&page=${i-1}">${i}</a></li>
+            </c:otherwise>
+          </c:choose>
+        </c:forEach>
+
+        <!-- 다음 -->
+        <c:choose>
+          <c:when test="${ulist.last}"></c:when>
+          <c:otherwise>
+            <li class="page-item "><a class="page-link"
+              href="/admin/userlist/?field=${param.field}&word=${param.word}&page=${ulist.number+1}">&rarr;</a></li>
+            <li class="page-item "><a class="page-link"
+              href="/admin/userlist/?field=${param.field}&word=${param.word}&page=${ulist.totalPages-1}">마지막</a></li>
+          </c:otherwise>
+        </c:choose>
+      </ul>
+
     </div>
   </div>
 </body>
