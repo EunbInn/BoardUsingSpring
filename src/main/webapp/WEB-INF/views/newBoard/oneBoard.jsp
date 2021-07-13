@@ -65,26 +65,25 @@
       <ul class="pagination justify-content-center">
         <!-- 이전 -->
         <c:choose>
-          <c:when test="${ulist.first}"></c:when>
+          <c:when test="${boardItems.first}"></c:when>
           <c:otherwise>
             <li class="page-item"><a class="page-link"
-              href="/admin/userlist/?field=${param.field}&word=${param.word}&page=0">처음</a></li>
+              href="${path }/oneBoard/${boardId }/0">처음</a></li>
             <li class="page-item"><a class="page-link"
-              href="/admin/userlist/?field=${param.field}&word=${param.word}&page=${ulist.number-1}">&larr;</a></li>
+              href="${path }/oneBoard/${boardId }/${boardItems.number-1}">&larr;</a></li>
           </c:otherwise>
         </c:choose>
 
         <!-- 페이지 그룹 -->
-        <c:forEach begin="${startBlockPage}" end="${endBlockPage}"
-          var="i">
+        <c:forEach begin="${startPage}" end="${endPage}" var="i">
           <c:choose>
-            <c:when test="${ulist.pageable.pageNumber+1 == i}">
+            <c:when test="${boardItems.pageable.pageNumber+1 == i}">
               <li class="page-item disabled"><a class="page-link"
-                href="/admin/userlist/?field=${param.field}&word=${param.word}&page=${i-1}">${i}</a></li>
+                href="${path }/oneBoard/${boardId }/${i-1}">${i}</a></li>
             </c:when>
             <c:otherwise>
               <li class="page-item"><a class="page-link"
-                href="/admin/userlist/?field=${param.field}&word=${param.word}&page=${i-1}">${i}</a></li>
+                href="${path }/oneBoard/${boardId }/${i-1}">${i}</a></li>
             </c:otherwise>
           </c:choose>
         </c:forEach>
@@ -94,9 +93,9 @@
           <c:when test="${ulist.last}"></c:when>
           <c:otherwise>
             <li class="page-item "><a class="page-link"
-              href="/admin/userlist/?field=${param.field}&word=${param.word}&page=${ulist.number+1}">&rarr;</a></li>
+              href="${path }/oneBoard/${boardId }/${boardItems.number+1}">&rarr;</a></li>
             <li class="page-item "><a class="page-link"
-              href="/admin/userlist/?field=${param.field}&word=${param.word}&page=${ulist.totalPages-1}">마지막</a></li>
+              href="${path }/oneBoard/${boardId }/${boardItems.totalPages-1}">마지막</a></li>
           </c:otherwise>
         </c:choose>
       </ul>
