@@ -76,10 +76,13 @@ public class BoardController {
         } else {
             boardItems = boardItemService.search(value, keyType, pageable);
         }
+        
+        int startPage = (boardItems.getNumber() / 10) * 10 + 1;
+        int endPage = startPage + 9;
         model.addAttribute("board", getBoard);
         model.addAttribute("boardItems", boardItems);
-        
-        
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         
         return "/newBoard/oneBoard";
     }

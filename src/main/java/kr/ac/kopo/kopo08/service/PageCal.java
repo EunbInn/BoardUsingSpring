@@ -12,11 +12,9 @@ public class PageCal {
     private boolean prevPage;
     
     public PageCal(Page<BoardItem> page) {
-        this.startPage = 1;
-        this.endPage = 10;
+        this.startPage = (page.getNumber() / 10) * 10 + 1;
+        this.endPage = startPage + 9;
         this.totalPage = page.getTotalPages();
-        this.nextPage;
-        this.prevPage;
         
     }
 
