@@ -12,6 +12,22 @@
 <link href="${path}/resources/css/oneBoard.css" rel="stylesheet" />
 <script
   src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<style>
+  .page-item {
+    list-style: none;
+    display: inline-block;
+  }
+  
+  .page-item a {
+    text-decoration: none;
+    color: black;
+  }
+  
+  .disabled {
+    font-weight: bold;
+    pointer-events: none;
+  }
+</style>
 </head>
 <body>
   <div id="content-wrap">
@@ -24,8 +40,8 @@
           <option value="writer">작성자</option>
           <option value="title+writer">제목+작성자</option>
         </select> <input id="value" name="value" type="text" maxlength="30"
-          placeholder="검색어 입력"> <input type="submit" id="submit"
-          formaction="./oneBoard/${board.id }" value="검색">
+          placeholder="검색어 입력" value="${value }"> <input type="submit" id="submit"
+          formaction="./oneBoard?boardId=${board.id }&page=0" value="검색">
       </form>
     </div>
     <table>
@@ -48,7 +64,7 @@
           <c:forEach var="boardItem" items="${boardItemList }"
             varStatus="status">
             <tr>
-              <td>${boardItemSize - (status.count - 1)}</td>
+              <td>${startNumber - (status.count - 1)}</td>
               <td><a
                 href="${path}/oneView/${board.id}/${boardItem.id}">${boardItem.title }</a></td>
               <td>${boardItem.writer }</td>
@@ -65,12 +81,12 @@
       <ul class="pagination justify-content-center">
         <!-- 이전 -->
         <c:choose>
-          <c:when test="${boardItems.first}"></c:when>
+          <c:when test="${boardItems.isFirst()}"></c:when>
           <c:otherwise>
             <li class="page-item"><a class="page-link"
-              href="${path }/oneBoard/${boardId }/0">처음</a></li>
+              href="${path }/oneBoard?boardId=${board.id }&page=0&keyType=${keyType}&value=${value}">처음</a></li>
             <li class="page-item"><a class="page-link"
-              href="${path }/oneBoard/${boardId }/${boardItems.number-1}">&larr;</a></li>
+              href="${path }/oneBoard?boardId=${board.id }&page=${boardItems.number-1}&keyType=${keyType}&value=${value}">&larr;</a></li>
           </c:otherwise>
         </c:choose>
 
@@ -79,23 +95,23 @@
           <c:choose>
             <c:when test="${boardItems.pageable.pageNumber+1 == i}">
               <li class="page-item disabled"><a class="page-link"
-                href="${path }/oneBoard/${boardId }/${i-1}">${i}</a></li>
+                href="${path }/oneBoard?boardId=${board.id }&page=${i-1}&keyType=${keyType}&value=${value}">${i}</a></li>
             </c:when>
             <c:otherwise>
               <li class="page-item"><a class="page-link"
-                href="${path }/oneBoard/${boardId }/${i-1}">${i}</a></li>
+                href="${path }/oneBoard?boardId=${board.id }&page=${i-1}&keyType=${keyType}&value=${value}">${i}</a></li>
             </c:otherwise>
           </c:choose>
         </c:forEach>
 
         <!-- 다음 -->
         <c:choose>
-          <c:when test="${ulist.last}"></c:when>
+          <c:when test="${boardItems.isLast()}"></c:when>
           <c:otherwise>
             <li class="page-item "><a class="page-link"
-              href="${path }/oneBoard/${boardId }/${boardItems.number+1}">&rarr;</a></li>
+              href="${path }/oneBoard?boardId=${board.id }&page=${boardItems.number+1}&keyType=${keyType}&value=${value}">&rarr;</a></li>
             <li class="page-item "><a class="page-link"
-              href="${path }/oneBoard/${boardId }/${boardItems.totalPages-1}">마지막</a></li>
+              href="${path }/oneBoard?boardId=${board.id }&page=${boardItems.totalPages-1}&keyType=${keyType}&value=${value}">마지막</a></li>
           </c:otherwise>
         </c:choose>
       </ul>

@@ -33,8 +33,8 @@
                 <c:forEach var="board" items="${boardList }" varStatus="status">
                   <tr>
                   <td> ${board.id }</td>
-                  <td><a href="${path}/oneBoard/${board.id }">${board.title }</a></td>
-                  <td><a href="${path}/update01/${board.id }">수정</a></td>
+                  <td><a href="${path}/oneBoard?boardId=${board.id }&page=0">${board.title }</a></td>
+                  <td><a href="${path}/update01?boardId=${board.id }">수정</a></td>
                   </tr>
                 </c:forEach>
               </c:otherwise>

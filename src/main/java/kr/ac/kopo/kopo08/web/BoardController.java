@@ -1,6 +1,5 @@
 package kr.ac.kopo.kopo08.web;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.ac.kopo.kopo08.domain.Board;
 import kr.ac.kopo.kopo08.domain.BoardItem;
@@ -56,33 +56,42 @@ public class BoardController {
         return "/updateBoard/update01";
     }
 
-    @RequestMapping(value = "/oneBoard/{boardId}", method= {RequestMethod.GET, RequestMethod.POST})
-    public String findOneBoard(@PathVariable(name = "boardId") Long boardId,
+    @RequestMapping(value = "/oneBoard", method= {RequestMethod.GET, RequestMethod.POST})
+    public String findOneBoard(@RequestParam(name="boardId") Long boardId,
                                 @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-                                @ModelAttribute HashMap<String, String> map,
+                                @RequestParam(required=false, name="keyType") String keyType,
+                                @RequestParam(required=false, defaultValue="") String value,
                                 Model model) {
-        String keyType = map.get("keyType");
-        String value = map.get("value");
         // 보드 가져오기
         Optional<Board> board = boardRepository.findById(boardId);
         Board getBoard = board.get();
         getBoard = boardService.showBoard(getBoard);
         Page<BoardItem> boardItems;
-        System.out.println(value);
         
-        if (value == null) {
+        if (value.equals("")) {
             boardItems = boardItemRepository.findAllByBoardId(boardId, pageable);
             boardItems = boardItemService.showBoardItems(boardItems);
         } else {
             boardItems = boardItemService.search(value, keyType, pageable);
+            boardItems = boardItemService.showBoardItems(boardItems);
         }
         
-        int startPage = (boardItems.getNumber() / 10) * 10 + 1;
+        int currentPage = boardItems.getPageable().getPageNumber();
+        int startPage = (currentPage / 10) * 10 + 1;
         int endPage = startPage + 9;
+        if (endPage > boardItems.getTotalPages()) {
+            endPage = boardItems.getTotalPages();
+        }
+        
+        Long totalContent = boardItems.getTotalElements();
+        Long nowStartContentNumber = totalContent - (currentPage * 10);
         model.addAttribute("board", getBoard);
         model.addAttribute("boardItems", boardItems);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
+        model.addAttribute("startNumber", nowStartContentNumber);
+        model.addAttribute("keyType", keyType);
+        model.addAttribute("value", value);
         
         return "/newBoard/oneBoard";
     }
