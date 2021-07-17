@@ -37,7 +37,7 @@ public class BoardItemController {
         BoardItem boardItem = boardItemOp.get();
         boardItem = boardItemService.showBoardItem(boardItem);
 
-        // comments 가져오기
+        // comments 가져오기 test
         List<BoardItem> comments = boardItemRepository.findAllByParent(id, Sort.by(Sort.Direction.DESC, "id"));
         comments = boardItemService.showBoardItems(comments);
         
