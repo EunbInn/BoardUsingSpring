@@ -92,6 +92,7 @@ public class BoardController {
         model.addAttribute("startNumber", nowStartContentNumber);
         model.addAttribute("keyType", keyType);
         model.addAttribute("value", value);
+        model.addAttribute("page", currentPage);
         
         return "/newBoard/oneBoard";
     }
