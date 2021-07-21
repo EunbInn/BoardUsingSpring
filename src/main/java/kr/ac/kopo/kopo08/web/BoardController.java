@@ -93,6 +93,7 @@ public class BoardController {
         model.addAttribute("keyType", keyType);
         model.addAttribute("value", value);
         model.addAttribute("page", currentPage);
+        model.addAttribute("boardId", boardId);
         
         return "/newBoard/oneBoard";
     }
